@@ -1,13 +1,14 @@
-import InternalPermissionMiddleware, {
+import {
+  Insurance,
+  InternalInsuranceMiddleware,
+  InternalPermissionMiddleware,
   PERMISSION,
-} from '../middlewares/internal/permissions';
+} from '..';
 import { OPCODE, Wrapper } from '../tools';
 
-import { Insurance } from '../controllers/insurance';
-import InternalInsuranceMiddleware from '../middlewares/internal/insurance';
 import { Router } from 'express';
 
-export default function getInternalRouter(): Router {
+export function getInternalRouter(): Router {
   const router = Router();
 
   router.post(

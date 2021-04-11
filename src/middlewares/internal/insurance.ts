@@ -1,9 +1,6 @@
-import { InternalError, OPCODE, Wrapper } from '../../tools';
+import { Callback, Insurance, InternalError, OPCODE, Wrapper } from '../..';
 
-import { Callback } from '../../tools/wrapper';
-import { Insurance } from '../../controllers/insurance';
-
-export default function InternalInsuranceMiddleware(): Callback {
+export function InternalInsuranceMiddleware(): Callback {
   return Wrapper(async (req, res, next) => {
     const {
       params: { insuranceId },

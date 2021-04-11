@@ -1,17 +1,13 @@
-import { InternalError, Wrapper } from '../tools';
+import { Callback, InternalError, Wrapper, logger } from '..';
 import {
   InternalPlatformClient,
   OPCODE,
   PlatformPermission,
 } from 'openapi-internal-sdk';
 
-import { Callback } from '../tools/wrapper';
-import logger from '../tools/logger';
 import os from 'os';
 
-export default function PlatformMiddleware(
-  permissionIds: string[] = []
-): Callback {
+export function PlatformMiddleware(permissionIds: string[] = []): Callback {
   const hostname = os.hostname();
   const platformClient = new InternalPlatformClient({
     issuer: 'openapi.hikick.kr',

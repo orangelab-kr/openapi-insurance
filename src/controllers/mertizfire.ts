@@ -1,9 +1,8 @@
+import { InternalError, lookupAddress } from '..';
 import got, { Got } from 'got';
 
-import { InsuranceModel } from '.prisma/client';
-import InternalError from '../tools/error';
+import { InsuranceModel } from '@prisma/client';
 import dayjs from 'dayjs';
-import { lookupAddress } from '../tools/location';
 
 export class Mertizfire {
   private static got?: Got;

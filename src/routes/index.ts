@@ -1,15 +1,19 @@
+import {
+  InternalError,
+  InternalMiddleware,
+  OPCODE,
+  Wrapper,
+  getInternalRouter,
+  logger,
+} from '..';
 import express, { Application } from 'express';
 
-import InternalError from '../tools/error';
-import InternalMiddleware from '../middlewares/internal';
-import OPCODE from '../tools/opcode';
-import Wrapper from '../tools/wrapper';
-import getInternalRouter from './internal';
-import logger from '../tools/logger';
 import morgan from 'morgan';
 import os from 'os';
 
-export default function getRouter(): Application {
+export * from './internal';
+
+export function getRouter(): Application {
   const router = express();
   InternalError.registerSentry(router);
 

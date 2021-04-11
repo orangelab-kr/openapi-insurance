@@ -1,7 +1,4 @@
-import Wrapper, { Callback } from '../../tools/wrapper';
-
-import InternalError from '../../tools/error';
-import { OPCODE } from '../../tools';
+import { Callback, InternalError, OPCODE, Wrapper } from '../..';
 
 export enum PERMISSION {
   INSURANCE_START,
@@ -11,9 +8,7 @@ export enum PERMISSION {
   INSURANCE_VIEW,
 }
 
-export default function InternalPermissionMiddleware(
-  permission: PERMISSION
-): Callback {
+export function InternalPermissionMiddleware(permission: PERMISSION): Callback {
   return Wrapper(async (req, res, next) => {
     if (!req.internal.prs[permission]) {
       throw new InternalError(

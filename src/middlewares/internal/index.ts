@@ -1,14 +1,12 @@
+export * from './insurance';
 export * from './permissions';
 
-import { Joi, OPCODE } from '../../tools';
-import Wrapper, { Callback } from '../../tools/wrapper';
+import { Callback, InternalError, Joi, OPCODE, Wrapper, logger } from '../..';
 
-import InternalError from '../../tools/error';
 import jwt from 'jsonwebtoken';
-import logger from '../../tools/logger';
 import moment from 'moment';
 
-export default function InternalMiddleware(): Callback {
+export function InternalMiddleware(): Callback {
   return Wrapper(async (req, res, next) => {
     const { headers, query } = req;
     const token = headers.authorization
