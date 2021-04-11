@@ -6,6 +6,7 @@ import { OPCODE } from '../../tools';
 export enum PERMISSION {
   INSURANCE_START,
   INSURANCE_END,
+  INSURANCE_CANCEL,
   INSURANCE_LIST,
   INSURANCE_VIEW,
 }
