@@ -1,7 +1,7 @@
-import { Database, InternalError, Joi, OPCODE } from '../tools';
-import { InsuranceModel, InsuranceProvider } from '.prisma/client';
+import { InsuranceModel, InsuranceProvider } from '@prisma/client';
+import { InternalError, Joi, Mertizfire, OPCODE } from '..';
 
-import { Mertizfire } from './mertizfire';
+import { Database } from '../tools';
 
 const { prisma } = Database;
 

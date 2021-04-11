@@ -3,8 +3,8 @@ export * from './permissions';
 
 import { Callback, InternalError, Joi, OPCODE, Wrapper, logger } from '../..';
 
+import dayjs from 'dayjs';
 import jwt from 'jsonwebtoken';
-import moment from 'moment';
 
 export function InternalMiddleware(): Callback {
   return Wrapper(async (req, res, next) => {
@@ -40,8 +40,8 @@ export function InternalMiddleware(): Callback {
       });
 
       const payload = await schema.validateAsync(data);
-      const iat = moment(payload.iat);
-      const exp = moment(payload.exp);
+      const iat = dayjs(payload.iat);
+      const exp = dayjs(payload.exp);
       const prs = parseInt(payload.prs, 36)
         .toString(2)
         .padStart(128, '0')

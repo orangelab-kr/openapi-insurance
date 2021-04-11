@@ -2,9 +2,10 @@ import {
   Insurance,
   InternalInsuranceMiddleware,
   InternalPermissionMiddleware,
+  OPCODE,
   PERMISSION,
+  Wrapper,
 } from '..';
-import { OPCODE, Wrapper } from '../tools';
 
 import { Router } from 'express';
 
