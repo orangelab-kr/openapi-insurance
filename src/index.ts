@@ -1,6 +1,6 @@
-import dotenv from 'dotenv';
+import { Database } from './tools';
 import getRouter from './routes';
 import serverless from 'serverless-http';
-if (process.env.NODE_ENV === 'development') dotenv.config();
 
+Database.initPrisma();
 export const handler = serverless(getRouter());

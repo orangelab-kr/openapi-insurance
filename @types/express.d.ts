@@ -3,6 +3,7 @@ import 'express';
 declare global {
   namespace Express {
     interface Request {
+      accessKey: InternalPlatformAccessKey;
       internal: {
         sub: string;
         iss: string;
