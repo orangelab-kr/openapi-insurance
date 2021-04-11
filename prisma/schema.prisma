@@ -1,0 +1,38 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum InsuranceProvider {
+  mertizfire
+}
+
+model InsuranceModel {
+  insuranceId String @id @default(uuid())
+
+  provider InsuranceProvider
+
+  userId String
+  kickboardCode String
+  platformId String
+  phone String
+
+  latitude Int
+  longitude Int
+
+  startedAt DateTime @default(now())
+  endedAt DateTime?
+  canceledAt DateTime?
+  reason String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+}
