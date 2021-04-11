@@ -24,8 +24,8 @@ model InsuranceModel {
   platformId String
   phone String
 
-  latitude Int
-  longitude Int
+  latitude Float
+  longitude Float
 
   startedAt DateTime @default(now())
   endedAt DateTime?

@@ -1,14 +1,18 @@
 import express, { Application } from 'express';
 
 import InternalError from '../tools/error';
+import InternalMiddleware from '../middlewares/internal';
 import OPCODE from '../tools/opcode';
 import Wrapper from '../tools/wrapper';
+import getInternalRouter from './internal';
 import logger from '../tools/logger';
 import morgan from 'morgan';
 import os from 'os';
 
 export default function getRouter(): Application {
   const router = express();
+  InternalError.registerSentry(router);
+
   const hostname = os.hostname();
   const logging = morgan('common', {
     stream: { write: (str: string) => logger.info(`${str.trim()}`) },
@@ -17,6 +21,7 @@ export default function getRouter(): Application {
   router.use(logging);
   router.use(express.json());
   router.use(express.urlencoded({ extended: true }));
+  router.use('/internal', InternalMiddleware(), getInternalRouter());
 
   router.get(
     '/',
@@ -32,7 +37,7 @@ export default function getRouter(): Application {
   router.all(
     '*',
     Wrapper(async () => {
-      throw new InternalError('Invalid API', 404);
+      throw new InternalError('Invalid API', OPCODE.ERROR);
     })
   );
 
