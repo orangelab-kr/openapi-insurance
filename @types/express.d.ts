@@ -1,4 +1,6 @@
+import { InsuranceModel } from '@prisma/client';
 import 'express';
+import { InternalPlatformAccessKey } from 'openapi-internal-sdk';
 
 declare global {
   namespace Express {
@@ -11,6 +13,7 @@ declare global {
         prs: boolean[];
         iat: Date;
         exp: Date;
+        insurance: InsuranceModel;
       };
     }
   }
