@@ -8,6 +8,7 @@ import {
 } from '..';
 import express, { Application } from 'express';
 
+import cors from 'cors';
 import morgan from 'morgan';
 import os from 'os';
 
@@ -22,6 +23,7 @@ export function getRouter(): Application {
     stream: { write: (str: string) => logger.info(`${str.trim()}`) },
   });
 
+  router.use(cors());
   router.use(logging);
   router.use(express.json());
   router.use(express.urlencoded({ extended: true }));
