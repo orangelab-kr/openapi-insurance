@@ -1,14 +1,12 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 datasource db {
   provider = "mysql"
   url      = env("DATABASE_URL")
 }
 
 generator client {
-  provider      = "prisma-client-js"
-  binaryTargets = ["native", "rhel-openssl-1.0.x"]
+  provider        = "prisma-client-js"
+  binaryTargets   = ["native", "rhel-openssl-1.0.x"]
+  previewFeatures = ["nApi"]
 }
 
 enum InsuranceProvider {
@@ -20,20 +18,20 @@ model InsuranceModel {
 
   provider InsuranceProvider
 
-  userId String
+  userId        String
   kickboardCode String
-  platformId String
-  phone String
+  platformId    String
+  phone         String
 
-  latitude Float
+  latitude  Float
   longitude Float
 
-  startedAt DateTime @default(now())
-  endedAt DateTime?
+  startedAt  DateTime  @default(now())
+  endedAt    DateTime?
   canceledAt DateTime?
-  reason String?
+  reason     String?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 }
