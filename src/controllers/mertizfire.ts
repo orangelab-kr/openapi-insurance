@@ -15,14 +15,8 @@ export class Mertizfire {
     latitude: number;
     longitude: number;
   }): Promise<void> {
-    const {
-      insuranceId,
-      userId,
-      kickboardCode,
-      phone,
-      latitude,
-      longitude,
-    } = props;
+    const { insuranceId, userId, kickboardCode, phone, latitude, longitude } =
+      props;
 
     const ride_type = '5';
     const biz_driving_id = insuranceId.substr(0, 30);

@@ -18,7 +18,7 @@ export async function lookupAddress(props: {
   }).json<any>();
 
   if (res.status.code !== 0 || res.results.length <= 0) {
-    return '조회 불가능한 주소';
+    return `조회 불가능한 주소(${props.latitude}, ${props.longitude})`;
   }
 
   const {
