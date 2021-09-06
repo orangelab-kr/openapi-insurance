@@ -109,11 +109,10 @@ export class Insurance {
   }
 
   public static async getInsuranceOrThrow(
-    insuranceId: string
+    insuranceId: string,
+    platformId?: string
   ): Promise<InsuranceModel> {
-    const insurance = await prisma.insuranceModel.findFirst({
-      where: { insuranceId },
-    });
+    const insurance = await Insurance.getInsurance(insuranceId, platformId);
 
     if (!insurance) {
       throw new InternalError(
@@ -126,10 +125,11 @@ export class Insurance {
   }
 
   public static async getInsurance(
-    insuranceId: string
+    insuranceId: string,
+    platformId?: string
   ): Promise<InsuranceModel | null> {
     const insurance = await prisma.insuranceModel.findFirst({
-      where: { insuranceId },
+      where: { insuranceId, platformId },
     });
 
     return insurance;

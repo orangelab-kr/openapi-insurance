@@ -1,3 +1,4 @@
+export * from './insurance';
 export * from './internal';
 export * from './logger';
 export * from './platform';

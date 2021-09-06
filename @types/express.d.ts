@@ -5,7 +5,9 @@ import { InternalPlatformAccessKey } from 'openapi-internal-sdk';
 declare global {
   namespace Express {
     interface Request {
+      permissionIds: string[];
       loggined: {
+        insurance?: InsuranceModel;
         platform: InternalPlatform;
         accessKey?: InternalPlatformAccessKey;
         user?: InternalPlatformUser;
