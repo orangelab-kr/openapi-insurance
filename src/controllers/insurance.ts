@@ -51,28 +51,28 @@ export class Insurance {
       },
     });
 
-    const { insuranceId } = insurance;
     switch (provider) {
       case 'mertizfire':
-        await Mertizfire.start({
-          insuranceId,
-          userId,
-          kickboardCode,
-          phone,
-          latitude,
-          longitude,
-        });
+        await Mertizfire.start(insurance);
         break;
     }
 
     return insurance;
   }
 
-  public static async end(insurance: InsuranceModel): Promise<InsuranceModel> {
+  public static async end(
+    insurance: InsuranceModel,
+    props: { endedAt: Date }
+  ): Promise<InsuranceModel> {
     const { insuranceId, provider } = insurance;
+    const schema = Joi.object({
+      endedAt: Joi.date().default(new Date()).optional(),
+    });
+
+    const { endedAt } = await schema.validateAsync(props);
     const updatedInsurance = await prisma.insuranceModel.update({
       where: { insuranceId },
-      data: { endedAt: new Date() },
+      data: { endedAt },
     });
 
     switch (provider) {

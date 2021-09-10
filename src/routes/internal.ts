@@ -36,7 +36,8 @@ export function getInternalRouter(): Router {
     InternalPermissionMiddleware(PERMISSION.INSURANCE_END),
     InternalInsuranceMiddleware(),
     Wrapper(async (req, res) => {
-      await Insurance.end(req.internal.insurance);
+      const { internal, body } = req;
+      await Insurance.end(internal.insurance, body);
       res.json({ opcode: OPCODE.SUCCESS });
     })
   );

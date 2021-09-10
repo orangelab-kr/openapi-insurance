@@ -1,22 +1,21 @@
-import { InternalError, lookupAddress } from '..';
-import got, { Got } from 'got';
-
 import { InsuranceModel } from '@prisma/client';
 import dayjs from 'dayjs';
+import got, { Got } from 'got';
+import { InternalError, lookupAddress } from '..';
 
 export class Mertizfire {
   private static got?: Got;
 
-  public static async start(props: {
-    insuranceId: string;
-    userId: string;
-    kickboardCode: string;
-    phone: string;
-    latitude: number;
-    longitude: number;
-  }): Promise<void> {
-    const { insuranceId, userId, kickboardCode, phone, latitude, longitude } =
-      props;
+  public static async start(insurance: InsuranceModel): Promise<void> {
+    const {
+      insuranceId,
+      userId,
+      kickboardCode,
+      phone,
+      latitude,
+      longitude,
+      startedAt,
+    } = insurance;
 
     const ride_type = '5';
     const biz_driving_id = insuranceId.substr(0, 30);
@@ -24,7 +23,7 @@ export class Mertizfire {
     const bike_id = kickboardCode.padEnd(10, '_').toUpperCase();
     const client_cell = phone.substr(phone.length - 4);
     const start_address = await lookupAddress({ latitude, longitude });
-    const driving_start_datetime = this.getCurrentTime();
+    const driving_start_datetime = this.formatDate(startedAt);
     const client = this.getClient();
     await client({
       url: 'driving_bike_log/',
@@ -42,9 +41,13 @@ export class Mertizfire {
   }
 
   public static async end(insurance: InsuranceModel): Promise<void> {
-    const { insuranceId } = insurance;
+    const { insuranceId, endedAt } = insurance;
+    if (!endedAt) {
+      throw new InternalError('보험이 종료되지 않았습니다.');
+    }
+
     const biz_driving_id = insuranceId.substr(0, 30);
-    const driving_finish_datetime = this.getCurrentTime();
+    const driving_finish_datetime = this.formatDate(endedAt);
     const client = this.getClient();
     await client({
       url: `driving_bike_log/${biz_driving_id}/`,
@@ -67,8 +70,8 @@ export class Mertizfire {
     }).json();
   }
 
-  public static getCurrentTime(date = dayjs()): string {
-    return date.format('YYYYMMDDHHmmss');
+  public static formatDate(date: Date): string {
+    return dayjs(date).format('YYYYMMDDHHmmss');
   }
 
   public static getClient(): Got {
