@@ -1,7 +1,7 @@
 import { InsuranceModel } from '@prisma/client';
 import dayjs from 'dayjs';
 import got, { Got } from 'got';
-import { InternalError, lookupAddress } from '..';
+import { lookupAddress, RESULT } from '..';
 
 export class Mertizfire {
   private static got?: Got;
@@ -42,10 +42,7 @@ export class Mertizfire {
 
   public static async end(insurance: InsuranceModel): Promise<void> {
     const { insuranceId, endedAt } = insurance;
-    if (!endedAt) {
-      throw new InternalError('보험이 종료되지 않았습니다.');
-    }
-
+    if (!endedAt) throw RESULT.NOT_ENDED_INSURANCE();
     const biz_driving_id = insuranceId.substr(0, 30);
     const driving_finish_datetime = this.formatDate(endedAt);
     const client = this.getClient();
@@ -77,7 +74,7 @@ export class Mertizfire {
   public static getClient(): Got {
     if (this.got) return this.got;
     const token = process.env.MERTIZFIRE_TOKEN;
-    if (!token) throw new InternalError('메리츠 화재 보험 토큰이 없습니다.');
+    if (!token) throw RESULT.INVALID_MERTIZFIRE_TOKEN();
     this.got = got.extend({
       prefixUrl: 'https://zet.itechs.io/api',
       headers: {

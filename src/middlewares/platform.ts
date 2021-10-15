@@ -1,12 +1,12 @@
 import { PlatformPermission } from 'openapi-internal-sdk';
-import { Callback, InternalClient, Wrapper } from '..';
+import { WrapperCallback, InternalClient, Wrapper } from '..';
 
 export function PlatformMiddleware(
   props: {
     permissionIds?: string[];
     final?: boolean;
   } = {}
-): Callback {
+): WrapperCallback {
   const { permissionIds, final } = {
     permissionIds: [],
     final: false,

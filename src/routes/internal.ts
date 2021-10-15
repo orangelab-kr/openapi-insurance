@@ -1,13 +1,12 @@
+import { Router } from 'express';
 import {
   Insurance,
   InternalInsuranceMiddleware,
   InternalPermissionMiddleware,
-  OPCODE,
   PERMISSION,
+  RESULT,
   Wrapper,
 } from '..';
-
-import { Router } from 'express';
 
 export function getInternalRouter(): Router {
   const router = Router();
@@ -15,9 +14,9 @@ export function getInternalRouter(): Router {
   router.post(
     '/',
     InternalPermissionMiddleware(PERMISSION.INSURANCE_START),
-    Wrapper(async (req, res) => {
+    Wrapper(async (req) => {
       const { insuranceId } = await Insurance.start(req.body);
-      res.json({ opcode: OPCODE.SUCCESS, insuranceId });
+      throw RESULT.SUCCESS({ details: { insuranceId } });
     })
   );
 
@@ -25,9 +24,9 @@ export function getInternalRouter(): Router {
     '/:insuranceId',
     InternalPermissionMiddleware(PERMISSION.INSURANCE_VIEW),
     InternalInsuranceMiddleware(),
-    Wrapper(async (req, res) => {
+    Wrapper(async (req) => {
       const { insurance } = req.internal;
-      res.json({ opcode: OPCODE.SUCCESS, insurance });
+      throw RESULT.SUCCESS({ details: { insurance } });
     })
   );
 
@@ -35,10 +34,10 @@ export function getInternalRouter(): Router {
     '/:insuranceId',
     InternalPermissionMiddleware(PERMISSION.INSURANCE_END),
     InternalInsuranceMiddleware(),
-    Wrapper(async (req, res) => {
+    Wrapper(async (req) => {
       const { internal, body } = req;
       await Insurance.end(internal.insurance, body);
-      res.json({ opcode: OPCODE.SUCCESS });
+      throw RESULT.SUCCESS();
     })
   );
 
@@ -46,11 +45,12 @@ export function getInternalRouter(): Router {
     '/:insuranceId',
     InternalPermissionMiddleware(PERMISSION.INSURANCE_CANCEL),
     InternalInsuranceMiddleware(),
-    Wrapper(async (req, res) => {
+    Wrapper(async (req) => {
       const { internal, body } = req;
       await Insurance.cancel(internal.insurance, body);
-      res.json({ opcode: OPCODE.SUCCESS });
+      throw RESULT.SUCCESS();
     })
   );
+
   return router;
 }

@@ -4,8 +4,8 @@ import {
   getInternalRouter,
   InsuranceMiddleware,
   InternalMiddleware,
-  OPCODE,
   PlatformMiddleware,
+  RESULT,
   Wrapper,
 } from '..';
 
@@ -19,19 +19,16 @@ export function getRouter(): Router {
     '/:insuranceId',
     PlatformMiddleware({ permissionIds: ['insurance.view'], final: true }),
     InsuranceMiddleware(),
-    Wrapper(async (req, res) => {
+    Wrapper(async (req) => {
       const { insurance } = req.loggined;
-      res.json({ opcode: OPCODE.SUCCESS, insurance });
+      throw RESULT.SUCCESS({ details: { insurance } });
     })
   );
 
   router.get(
     '/',
-    Wrapper(async (_req, res) => {
-      res.json({
-        opcode: OPCODE.SUCCESS,
-        ...clusterInfo,
-      });
+    Wrapper(async () => {
+      throw RESULT.SUCCESS({ details: clusterInfo });
     })
   );
 

@@ -1,19 +1,13 @@
-import { Callback, Insurance, InternalError, OPCODE, Wrapper } from '..';
+import { Insurance, RESULT, Wrapper, WrapperCallback } from '..';
 
-export function InsuranceMiddleware(): Callback {
+export function InsuranceMiddleware(): WrapperCallback {
   return Wrapper(async (req, res, next) => {
     const {
       loggined: { platform },
       params: { insuranceId },
     } = req;
 
-    if (!insuranceId) {
-      throw new InternalError(
-        '해당 보험 내역을 찾을 수 없습니다.',
-        OPCODE.NOT_FOUND
-      );
-    }
-
+    if (!insuranceId) throw RESULT.CANNOT_FIND_INSURANCE();
     const insurance = await Insurance.getInsuranceOrThrow(
       insuranceId,
       platform.platformId

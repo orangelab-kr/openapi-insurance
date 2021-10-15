@@ -1,5 +1,5 @@
 import { InsuranceModel, InsuranceProvider } from '@prisma/client';
-import { InternalError, Joi, Mertizfire, OPCODE, prisma } from '..';
+import { Joi, Mertizfire, prisma, RESULT } from '..';
 
 export class Insurance {
   public static async start(props: {
@@ -109,14 +109,7 @@ export class Insurance {
     platformId?: string
   ): Promise<InsuranceModel> {
     const insurance = await Insurance.getInsurance(insuranceId, platformId);
-
-    if (!insurance) {
-      throw new InternalError(
-        '해당 보험 내역을 찾을 수 없습니다.',
-        OPCODE.NOT_FOUND
-      );
-    }
-
+    if (!insurance) throw RESULT.CANNOT_FIND_INSURANCE();
     return insurance;
   }
 
