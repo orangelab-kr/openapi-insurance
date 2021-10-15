@@ -2,13 +2,7 @@ import cors from 'cors';
 import express from 'express';
 import { OPCODE } from 'openapi-internal-sdk';
 import serverless from 'serverless-http';
-import {
-  Database,
-  getRouter,
-  InternalError,
-  LoggerMiddleware,
-  Wrapper,
-} from '.';
+import { getRouter, InternalError, LoggerMiddleware, Wrapper } from '.';
 
 export * from './controllers';
 export * from './middlewares';
@@ -17,7 +11,6 @@ export * from './tools';
 
 const app = express();
 InternalError.registerSentry(app);
-Database.initPrisma();
 
 app.use(cors());
 app.use(express.json());

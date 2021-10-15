@@ -1,9 +1,5 @@
 import { InsuranceModel, InsuranceProvider } from '@prisma/client';
-import { InternalError, Joi, Mertizfire, OPCODE } from '..';
-
-import { Database } from '../tools';
-
-const { prisma } = Database;
+import { InternalError, Joi, Mertizfire, OPCODE, prisma } from '..';
 
 export class Insurance {
   public static async start(props: {
