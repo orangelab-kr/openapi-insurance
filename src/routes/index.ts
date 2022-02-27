@@ -1,6 +1,7 @@
 import express, { Router } from 'express';
 import {
   clusterInfo,
+  getDebugRouter,
   getInternalRouter,
   InsuranceMiddleware,
   InternalMiddleware,
@@ -9,12 +10,14 @@ import {
   Wrapper,
 } from '..';
 
+export * from './debug';
 export * from './internal';
 
 export function getRouter(): Router {
   const router = express();
 
   router.use('/internal', InternalMiddleware(), getInternalRouter());
+  router.use('/debug', getDebugRouter());
   router.get(
     '/:insuranceId',
     PlatformMiddleware({ permissionIds: ['insurance.view'], final: true }),

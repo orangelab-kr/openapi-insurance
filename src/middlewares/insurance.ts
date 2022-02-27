@@ -8,9 +8,10 @@ export function InsuranceMiddleware(): WrapperCallback {
     } = req;
 
     if (!insuranceId) throw RESULT.CANNOT_FIND_INSURANCE();
+    const platformId = platform ? platform.platformId : undefined;
     const insurance = await Insurance.getInsuranceOrThrow(
       insuranceId,
-      platform.platformId
+      platformId
     );
 
     req.loggined.insurance = insurance;

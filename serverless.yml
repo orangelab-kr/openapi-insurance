@@ -5,8 +5,7 @@ provider:
   name: aws
   runtime: nodejs14.x
   region: ap-northeast-2
-  stage: ${opt.stage, 'stage'}
-  lambdaHashingVersion: '20201221'
+  stage: stage
   apiGateway:
     shouldStartNameWithService: true
 
@@ -16,6 +15,7 @@ package:
 plugins:
   - serverless-webpack
   - serverless-dotenv-plugin
+  - serverless-webpack-prisma
   - serverless-offline
 
 custom:
@@ -24,8 +24,6 @@ custom:
     packager: 'yarn'
     packagerOptions:
       noFrozenLockfile: true
-      scripts:
-        - prisma generate
   serverless-offline:
     noPrependStageInUrl: true
 
