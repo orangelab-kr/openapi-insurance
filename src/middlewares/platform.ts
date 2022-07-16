@@ -1,5 +1,5 @@
-import { PlatformPermission } from 'openapi-internal-sdk';
-import { WrapperCallback, InternalClient, Wrapper } from '..';
+import { PlatformPermission } from '@hikick/openapi-internal-sdk';
+import { InternalClient, Wrapper, WrapperCallback } from '..';
 
 export function PlatformMiddleware(
   props: {

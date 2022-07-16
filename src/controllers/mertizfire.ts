@@ -1,10 +1,10 @@
 import { InsuranceModel } from '@prisma/client';
+import axios, { Axios } from 'axios';
 import dayjs from 'dayjs';
-import got, { Got } from 'got';
 import { lookupAddress, RESULT } from '..';
 
 export class Mertizfire {
-  private static got?: Got;
+  private static axios?: Axios;
 
   public static async start(insurance: InsuranceModel): Promise<void> {
     const {
@@ -24,20 +24,15 @@ export class Mertizfire {
     const client_cell = phone.substr(phone.length - 4);
     const start_address = await lookupAddress({ latitude, longitude });
     const driving_start_datetime = this.formatDate(startedAt);
-    const client = this.getClient();
-    await client({
-      url: 'driving_bike_log/',
-      method: 'POST',
-      json: {
-        ride_type,
-        biz_driving_id,
-        biz_user_id,
-        bike_id,
-        client_cell,
-        start_address,
-        driving_start_datetime,
-      },
-    }).json();
+    await this.getClient().post('/driving_bike_log/', {
+      ride_type,
+      biz_driving_id,
+      biz_user_id,
+      bike_id,
+      client_cell,
+      start_address,
+      driving_start_datetime,
+    });
   }
 
   public static async end(insurance: InsuranceModel): Promise<void> {
@@ -45,12 +40,9 @@ export class Mertizfire {
     if (!endedAt) throw RESULT.NOT_ENDED_INSURANCE();
     const biz_driving_id = insuranceId.substr(0, 30);
     const driving_finish_datetime = this.formatDate(endedAt);
-    const client = this.getClient();
-    await client({
-      url: `driving_bike_log/${biz_driving_id}/`,
-      method: 'POST',
-      json: { driving_finish_datetime },
-    }).json();
+    await this.getClient().post(`/driving_bike_log/${biz_driving_id}/`, {
+      driving_finish_datetime,
+    });
   }
 
   public static async cancel(
@@ -59,29 +51,26 @@ export class Mertizfire {
   ): Promise<void> {
     const { insuranceId } = insurance;
     const biz_driving_id = insuranceId.substr(0, 30);
-    const client = this.getClient();
-    await client({
-      url: `driving_bike_log/${biz_driving_id}/cancel/`,
-      method: 'POST',
-      json: { description: reason },
-    }).json();
+    await this.getClient().post(`/driving_bike_log/${biz_driving_id}/cancel/`, {
+      description: reason,
+    });
   }
 
   public static formatDate(date: Date): string {
     return dayjs(date).format('YYYYMMDDHHmmss');
   }
 
-  public static getClient(): Got {
-    if (this.got) return this.got;
+  public static getClient(): Axios {
+    if (this.axios) return this.axios;
     const token = process.env.MERTIZFIRE_TOKEN;
     if (!token) throw RESULT.INVALID_MERTIZFIRE_TOKEN();
-    this.got = got.extend({
-      prefixUrl: 'https://zet.itechs.io/api',
+    this.axios = axios.create({
+      baseURL: 'https://zet.itechs.io/api',
       headers: {
         Authorization: `Token ${token}`,
       },
     });
 
-    return this.got;
+    return this.axios;
   }
 }
